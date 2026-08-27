@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+<meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
   <title>I Plus One - Language Services</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
@@ -9,7 +9,6 @@
   <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-
     /* ============================================
    ROOT VARIABLES & DESIGN TOKENS
    ============================================ */
@@ -88,6 +87,94 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   padding: var(--space-lg);
+}
+
+/* ============================================
+   SCREENSHOT PROTECTION OVERLAY
+   ============================================ */
+.screenshot-protection-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  animation: fadeIn 0.3s ease;
+}
+
+.screenshot-protection-overlay.active {
+  display: flex;
+}
+
+.screenshot-protection-overlay .protection-content {
+  background: white;
+  padding: 40px 50px;
+  border-radius: var(--radius-xl);
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: scaleIn 0.3s ease;
+}
+
+.screenshot-protection-overlay .protection-content i {
+  font-size: 3rem;
+  color: var(--fire-red);
+  margin-bottom: 15px;
+}
+
+.screenshot-protection-overlay .protection-content h2 {
+  color: var(--dark-text);
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.screenshot-protection-overlay .protection-content p {
+  color: var(--medium-text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.screenshot-protection-overlay .protection-content .protection-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================
+   WATERMARK STYLES
+   ============================================ */
+.watermark-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99998;
+  display: none;
+}
+
+.watermark-overlay.active {
+  display: block;
+}
+
+.watermark-text {
+  position: absolute;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: rgba(255, 140, 0, 0.08);
+  transform: rotate(-30deg);
+  white-space: nowrap;
+  letter-spacing: 2px;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
 }
 
 input,
@@ -407,7 +494,7 @@ h1 {
 }
 
 /* ============================================
-   HEADER ACTIONS - ENHANCED LOGOUT & CHANGE PASSWORD
+   HEADER ACTIONS - THEMED BUTTONS
    ============================================ */
 .header-actions {
   display: flex;
@@ -423,33 +510,18 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 10px 24px;
   border: none;
   border-radius: var(--radius-full);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-base);
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   min-height: 44px;
   min-width: 44px;
   letter-spacing: 0.02em;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.header-action-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.header-action-btn:active {
-  transform: scale(0.95);
-  transition: transform 0.1s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .header-action-btn .btn-icon {
@@ -461,24 +533,64 @@ h1 {
   display: inline;
 }
 
-/* Change Password specific */
+/* Change Password - ORANGE THEME */
 .header-action-btn.change-password {
-  background: rgba(255, 215, 0, 0.2);
-  border-color: rgba(255, 215, 0, 0.25);
+  background: linear-gradient(135deg, #fff5e6 0%, #ffeaa7 100%);
+  color: var(--orange);
+  border: 2px solid var(--orange);
+  box-shadow: 0 2px 12px rgba(255, 140, 0, 0.15);
 }
 
 .header-action-btn.change-password:hover {
-  background: rgba(255, 215, 0, 0.35);
+  background: linear-gradient(135deg, var(--orange) 0%, var(--fire-red) 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255, 140, 0, 0.35);
+  border-color: transparent;
 }
 
-/* Logout specific */
+.header-action-btn.change-password:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+.header-action-btn.change-password .btn-icon {
+  color: var(--orange);
+  transition: color var(--transition-base);
+}
+
+.header-action-btn.change-password:hover .btn-icon {
+  color: white;
+}
+
+/* Logout - RED THEME */
 .header-action-btn.logout {
-  background: rgba(255, 68, 68, 0.2);
-  border-color: rgba(255, 68, 68, 0.25);
+  background: linear-gradient(135deg, #fff0ee 0%, #ffdbd9 100%);
+  color: var(--quiz-red);
+  border: 2px solid var(--quiz-red);
+  box-shadow: 0 2px 12px rgba(255, 68, 68, 0.12);
 }
 
 .header-action-btn.logout:hover {
-  background: rgba(255, 68, 68, 0.35);
+  background: linear-gradient(135deg, var(--quiz-red) 0%, #cc0000 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255, 68, 68, 0.35);
+  border-color: transparent;
+}
+
+.header-action-btn.logout:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+.header-action-btn.logout .btn-icon {
+  color: var(--quiz-red);
+  transition: color var(--transition-base);
+}
+
+.header-action-btn.logout:hover .btn-icon {
+  color: white;
 }
 
 /* ============================================
@@ -2368,7 +2480,6 @@ footer {
     gap: 6px;
     border: 1px solid rgba(0, 0, 0, 0.06);
     background: rgba(255, 255, 255, 0.9);
-    color: var(--dark-text);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
@@ -2386,39 +2497,38 @@ footer {
     text-transform: uppercase;
   }
 
+  /* Change Password - ORANGE on mobile */
   .header-action-btn.change-password {
-    background: rgba(255, 215, 0, 0.08);
-    border-color: rgba(255, 215, 0, 0.15);
-    color: #b8860b;
+    background: linear-gradient(135deg, #fff5e6 0%, #ffeaa7 100%);
+    border-color: var(--orange);
+    color: var(--orange);
   }
 
   .header-action-btn.change-password:active {
-    background: rgba(255, 215, 0, 0.2);
+    background: linear-gradient(135deg, var(--orange) 0%, var(--fire-red) 100%);
+    color: white;
     transform: scale(0.96);
   }
 
   .header-action-btn.change-password .btn-icon {
-    color: #b8860b;
+    color: var(--orange);
   }
 
+  /* Logout - RED on mobile */
   .header-action-btn.logout {
-    background: rgba(255, 68, 68, 0.06);
-    border-color: rgba(255, 68, 68, 0.1);
-    color: #cc0000;
+    background: linear-gradient(135deg, #fff0ee 0%, #ffdbd9 100%);
+    border-color: var(--quiz-red);
+    color: var(--quiz-red);
   }
 
   .header-action-btn.logout:active {
-    background: rgba(255, 68, 68, 0.15);
+    background: linear-gradient(135deg, var(--quiz-red) 0%, #cc0000 100%);
+    color: white;
     transform: scale(0.96);
   }
 
   .header-action-btn.logout .btn-icon {
-    color: #cc0000;
-  }
-
-  .header-action-btn:hover {
-    transform: none;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    color: var(--quiz-red);
   }
 
   .header-actions {
@@ -3066,24 +3176,32 @@ footer {
   }
 
   .header-action-btn.change-password {
-    background: rgba(255, 215, 0, 0.1);
-    color: #ffd700;
+    background: linear-gradient(135deg, #2d1a00 0%, #3d2a00 100%);
+    color: #ffa500;
+    border-color: #ffa500;
   }
 
   .header-action-btn.logout {
-    background: rgba(255, 68, 68, 0.1);
+    background: linear-gradient(135deg, #2d0000 0%, #3d0000 100%);
     color: #ff6b6b;
-  }
-
-  .header-action-btn:active {
-    background: rgba(255, 255, 255, 0.15);
+    border-color: #ff6b6b;
   }
 }
-    
   </style>
 </head>
-
 <body>
+  <!-- Screenshot Protection Overlay -->
+  <div class="screenshot-protection-overlay" id="screenshotProtectionOverlay">
+    <div class="protection-content">
+      <div class="protection-icon">🚫</div>
+      <h2>Screenshots Disabled</h2>
+      <p>This content is protected. Screenshots are not allowed to protect the intellectual property of I Plus One Language Services.</p>
+    </div>
+  </div>
+
+  <!-- Watermark Overlay -->
+  <div class="watermark-overlay" id="watermarkOverlay"></div>
+
   <div class="container">
     <!-- Login Form -->
     <div class="login-container" id="loginContainer">
@@ -3118,13 +3236,13 @@ footer {
         <p class="subtitle">I Plus One - Language Services</p>
         <div class="access-level" id="accessLevel"></div>
         <div class="header-actions" id="headerActions">
-          <button id="changePasswordButton" class="header-btn header-btn-change-password" aria-label="Change Password" title="Change Password">
-            <i class="fas fa-key"></i>
-            <span class="header-btn-label">Change Password</span>
+          <button id="changePasswordButton" class="header-action-btn change-password" aria-label="Change Password">
+            <i class="fas fa-key btn-icon"></i>
+            <span class="btn-label">Change Password</span>
           </button>
-          <button id="logoutButton" class="header-btn header-btn-logout" aria-label="Logout" title="Logout">
-            <i class="fas fa-sign-out-alt"></i>
-            <span class="header-btn-label">Logout</span>
+          <button id="logoutButton" class="header-action-btn logout" aria-label="Logout">
+            <i class="fas fa-sign-out-alt btn-icon"></i>
+            <span class="btn-label">Logout</span>
           </button>
         </div>
       </header>
@@ -52253,6 +52371,135 @@ footer {
     };
 
     // ================================================================
+    // SCREENSHOT PROTECTION
+    // ================================================================
+    const ScreenshotProtection = {
+      overlay: null,
+      watermarkOverlay: null,
+      isVisible: false,
+
+      init() {
+        this.overlay = document.getElementById('screenshotProtectionOverlay');
+        this.watermarkOverlay = document.getElementById('watermarkOverlay');
+        this.setupProtection();
+        this.createWatermarks();
+      },
+
+      setupProtection() {
+        // Prevent keyboard shortcuts for screenshots
+        document.addEventListener('keydown', (e) => {
+          // Print Screen key
+          if (e.key === 'PrintScreen') {
+            this.showProtection();
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+S, Ctrl+S, Cmd+Shift+S, Cmd+S
+          if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+            this.showProtection();
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+P, Cmd+P (Print)
+          if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P')) {
+            this.showProtection();
+            e.preventDefault();
+            return false;
+          }
+        });
+
+        // Detect screenshot attempts via visibility change (common on mobile)
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            this.showProtection();
+          }
+        });
+
+        // Detect when user tries to share or take screenshot on mobile
+        document.addEventListener('blur', () => {
+          this.showProtection();
+        });
+
+        // Prevent context menu (right-click)
+        document.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          this.showProtection();
+        });
+
+        // Detect copy attempts
+        document.addEventListener('copy', (e) => {
+          e.preventDefault();
+          this.showProtection();
+        });
+
+        // Detect when user switches away from the page (potential screenshot tool)
+        document.addEventListener('pagehide', () => {
+          this.showProtection();
+        });
+
+        // Click handler to dismiss protection
+        this.overlay.addEventListener('click', () => {
+          this.hideProtection();
+        });
+      },
+
+      showProtection() {
+        if (!this.isVisible) {
+          this.isVisible = true;
+          this.overlay.classList.add('active');
+          this.watermarkOverlay.classList.add('active');
+
+          // Auto-hide after 2 seconds
+          clearTimeout(this._hideTimer);
+          this._hideTimer = setTimeout(() => {
+            this.hideProtection();
+          }, 2000);
+        }
+      },
+
+      hideProtection() {
+        this.isVisible = false;
+        this.overlay.classList.remove('active');
+        this.watermarkOverlay.classList.remove('active');
+        clearTimeout(this._hideTimer);
+      },
+
+      createWatermarks() {
+        const watermarkTexts = [
+          'I PLUS ONE',
+          'CONFIDENTIAL',
+          'PROTECTED',
+          'I + 1',
+          'LANGUAGE SERVICES'
+        ];
+
+        const positions = [
+          { top: '5%', left: '5%' },
+          { top: '5%', right: '5%' },
+          { bottom: '5%', left: '5%' },
+          { bottom: '5%', right: '5%' },
+          { top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(-30deg)' },
+          { top: '25%', left: '25%', transform: 'rotate(-25deg)' },
+          { top: '25%', right: '25%', transform: 'rotate(25deg)' },
+          { bottom: '25%', left: '25%', transform: 'rotate(25deg)' },
+          { bottom: '25%', right: '25%', transform: 'rotate(-25deg)' }
+        ];
+
+        positions.forEach((pos, index) => {
+          const el = document.createElement('div');
+          el.className = 'watermark-text';
+          el.textContent = watermarkTexts[index % watermarkTexts.length];
+          Object.assign(el.style, pos);
+          // Randomize opacity slightly
+          el.style.opacity = (0.04 + Math.random() * 0.06).toString();
+          this.watermarkOverlay.appendChild(el);
+        });
+      }
+    };
+
+    // ================================================================
     // VOICE SYSTEM
     // ================================================================
     const Voice = {
@@ -53700,6 +53947,10 @@ footer {
     document.addEventListener('DOMContentLoaded', async function() {
       addCopyProtectionStyles();
       setupCopyProtection();
+      
+      // Initialize screenshot protection
+      ScreenshotProtection.init();
+
       HivyWindow.init();
       Voice.setupAudioContext();
       setupLogin();
